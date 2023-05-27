@@ -1,0 +1,17 @@
+# .github/workflows/job-template.yml
+name: Job Template
+
+on:
+  workflow_call:
+
+
+jobs:
+  template-job:
+    runs-on: ubuntu-latest
+    outputs:
+      my-output: ${{ steps.my-step.outputs.my-output }}
+
+    steps:
+      - name: Run Step
+        id: my-step
+        run: echo "::set-output name=my-output::Hello from Job Template"
