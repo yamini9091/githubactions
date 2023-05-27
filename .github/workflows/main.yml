@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Use Job Template from Repo A
-        uses: ./.github/workflows/job-template.yml@main
+        uses: ./../job-template.yml@main
 
       - name: Output from Job Template
         run: echo "The output from the Job Template is ${{ needs.template-job.outputs.my-output }}"
