@@ -1,0 +1,25 @@
+# .github/workflows/main.yml
+name: Workflow
+
+on:
+  push:
+
+jobs:
+  job-a:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Job Template from Repo A
+        uses: ./.github/workflows/job-template.yml@main
+
+      - name: Output from Job Template
+        run: echo "The output from the Job Template is ${{ needs.template-job.outputs.my-output }}"
+
+  job-b:
+    needs: job-a
+    runs-on: ubuntu-latest
+    steps:
+      - name: Second Job
+        run: echo "The output from Job A is ${{ needs.job-a.outputs.my-output }}"
