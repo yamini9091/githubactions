@@ -1,27 +1,28 @@
-# Repo B - main.yml
-name: Workflow
-
+name: outputs
 on:
   push:
-    branches:
-      - main
-
 jobs:
-  job-a:
+  job1:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Use Job Template from Repo A
-        uses: yamini9091/githubactions/.github/workflows/job-template.yml@main
-
-      - name: Retrieve Output from Job Template
-        run: echo "The output from the Job Template is ${{ needs.template-job.outputs.my-output }}"
-
-  job-b:
-    needs: job-a
+      -
+        name: Do Work
+        run: |
+          echo '::set-output name=FAV_NUMBER::3'
+          echo '::set-output name=FAV_COLOR::blue'
+        id: abc
+      -
+        name: Read output
+        run: |
+          echo "${{steps.abc.outputs.FAV_NUMBER}}"
+          echo "${{steps.abc.outputs.FAV_COLOR}}"
+    outputs:
+      fav-animal: tiger
+      fav-number: ${{steps.abc.outputs.FAV_NUMBER}}
+  job2:
     runs-on: ubuntu-latest
+    needs: job1
     steps:
-      - name: Run Second Job
-        run: echo "The output from Job A is ${{ needs.job-a.outputs.my-output }}"
+      - run: |
+        echo "${{needs.job1.outputs.fav-animal}}"
+        echo "${{needs.job1.outputs.fav-number}}"
