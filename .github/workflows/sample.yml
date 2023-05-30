@@ -1,0 +1,24 @@
+name: "We 🎔 Perl"
+on:
+  issues:
+    types: [opened, edited, milestoned]
+
+jobs:
+  seasonal_greetings:
+    runs-on: windows-latest
+    steps:
+      - name: Maybe greet
+        id: maybe-greet
+        env:
+          HEY: "Hey you!"
+          GREETING: "Merry Xmas to you too!"
+          BODY: ${{ github.event.issue.body }}
+        run: |
+          $output=(perl -e 'print ($ENV{BODY} =~ /Merry/)?$ENV{GREETING}:$ENV{HEY};')
+          Write-Output "::set-output name=GREET::$output"
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          event-type: my-event
+          client-payload: '{"greet": "${{ steps.maybe-greet.outputs.GREET }}"}'
