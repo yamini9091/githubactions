@@ -1,17 +1,28 @@
-# .github/workflows/job-template.yml
-name: Job Template
+name: Job 2
 
 on:
-  workflow_call:
-
+  workflow_run:
+    workflows: ["Job 1"]
+    types:
+      - completed
 
 jobs:
-  template-job:
+  job2:
     runs-on: ubuntu-latest
-    outputs:
-      my-output: ${{ steps.my-step.outputs.my-output }}
-
+    needs: job1
     steps:
-      - name: Run Step
-        id: my-step
-        run: echo "::set-output name=my-output::Hello from Job Template"
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Use outputs from Job 1
+        env:
+          OUTPUT1: ${{ needs.job1.outputs.output1 }}
+          OUTPUT2: ${{ needs.job1.outputs.output2 }}
+        run: |
+          echo "Output 1: $OUTPUT1"
+          echo "Output 2: $OUTPUT2"
