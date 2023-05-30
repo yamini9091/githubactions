@@ -5,6 +5,7 @@ on:
     workflows: ["Job 1"]
     types:
       - completed
+
 jobs:
   job2:
     runs-on: ubuntu-latest
@@ -19,9 +20,16 @@ jobs:
           node-version: 14
 
       - name: Use outputs from Job 1
-        env:
-          OUTPUT1: ${{ needs.outputs.output1 }}
-          OUTPUT2: ${{ needs.outputs.output2 }}
         run: |
+          OUTPUT1=$(curl -sS --request GET \
+            --url "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ needs.outputs['workflow.Job 1.id'] }}/jobs" \
+            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --header 'Accept: application/vnd.github.v3+json' \
+          | jq -r '.jobs[0].steps[-1].outputs.test')
+          OUTPUT2=$(curl -sS --request GET \
+            --url "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ needs.outputs['workflow.Job 1.id'] }}/jobs" \
+            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --header 'Accept: application/vnd.github.v3+json' \
+          | jq -r '.jobs[1].steps[-1].outputs.test')
           echo "Output 1: $OUTPUT1"
           echo "Output 2: $OUTPUT2"
