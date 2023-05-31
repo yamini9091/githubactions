@@ -1,35 +1,48 @@
 name: Job 2
 
 on:
-  workflow_run:
-    workflows: ["Job 1"]
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
   job2:
     runs-on: ubuntu-latest
-    needs: ${{ github.event.workflow_run.id }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Trigger Job 1
+        uses: peter-evans/repository-dispatch@v1
         with:
-          node-version: 14
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: yamini9091/githubactions
+          workflow: job1.yml
+          ref: main
 
-      - name: Use outputs from Job 1
+      - name: Wait for Job 1 to complete
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log("Waiting for Job 1 to complete...");
+            const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
+              owner: 'yamini9091',
+              repo: 'githubactions,
+              workflow_file_name: 'job1.yml',
+              event: 'repository_dispatch'
+            });
+            const job1RunId = workflowRuns.workflow_runs[0].id;
+            console.log(`Job 1 workflow run ID: ${job1RunId}`);
+            while (true) {
+              const { data: workflowRun } = await octokit.rest.actions.getWorkflowRun({
+                owner: 'yamini9091',
+                repo: 'githubactions',
+                run_id: job1RunId
+              });
+              if (workflowRun.status === 'completed') {
+                console.log(`Job 1 completed with status: ${workflowRun.conclusion}`);
+                break;
+              }
+              console.log(`Job 1 status: ${workflowRun.status}`);
+              await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
+            }
+
+      - name: Continue with Job 2
         run: |
-          OUTPUT1=$(curl -sS --request GET \
-            --url "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ needs.outputs['workflow.Job 1.id'] }}/jobs" \
-            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            --header 'Accept: application/vnd.github.v3+json' \
-          | jq -r '.jobs[0].steps[-1].outputs.test')
-          OUTPUT2=$(curl -sS --request GET \
-            --url "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ needs.outputs['workflow.Job 1.id'] }}/jobs" \
-            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            --header 'Accept: application/vnd.github.v3+json' \
-          | jq -r '.jobs[1].steps[-1].outputs.test')
-          echo "Output 1: $OUTPUT1"
-          echo "Output 2: $OUTPUT2"
+          # Add your Job 2 steps here
