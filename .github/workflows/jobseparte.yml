@@ -2,8 +2,7 @@ name: Job 2
 
 on:
   push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   job1:
