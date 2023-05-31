@@ -1,0 +1,8 @@
+name: Reusable workflow
+
+on:
+ workflow_dispatch:
+
+jobs:
+ job1:
+   uses: ./.github/workflows/joboutput.yml
