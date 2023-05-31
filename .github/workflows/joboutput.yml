@@ -2,19 +2,27 @@ name: Job 2
 
 on:
   workflow_run:
-    workflows:
-      - Job 1
+    workflows: ["Job 1"]
     types:
       - completed
 
 jobs:
   job2:
     runs-on: ubuntu-latest
-    needs: Job 1
+    needs: ${{ github.event.workflow_run.id }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
       - name: Use outputs from Job 1
+        env:
+          OUTPUT1: ${{ needs.outputs.output1 }}
+          OUTPUT2: ${{ needs.outputs.output2 }}
         run: |
-          OUTPUT1=$(cat ${{ needs.Job_1.outputs.output1_path }})
-          OUTPUT2=$(cat ${{ needs.Job_1.outputs.output2_path }})
           echo "Output 1: $OUTPUT1"
           echo "Output 2: $OUTPUT2"
