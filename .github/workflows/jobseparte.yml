@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Consume job1 outputs
         id: consume
-        uses: yamini9091/githubactions@v1  # Replace with the repository that contains job1.yml
+        uses: yamini9091/githubactions@main  # Replace with the repository that contains job1.yml
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: job1.yml
