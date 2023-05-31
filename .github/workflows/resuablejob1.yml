@@ -20,4 +20,4 @@ jobs:
     steps:
       - name: Print job1-template outputs
         run: |
-          echo "Output from job1-template - output1: ${{ needs.job1.outputs.output1 }}, output2: ${{ needs.job1.outputs.output2 }}"
+          echo "Output from job1-template - output1: ${{ needs.job1.job1-template.outputs.output1 }}, output2: ${{ needs.job1.job1-template.outputs.output2 }}"
