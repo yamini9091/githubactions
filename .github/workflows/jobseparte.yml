@@ -1,0 +1,22 @@
+name: Job 2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consume job1 outputs
+        id: consume
+        uses: yamini9091/githubactions@v1  # Replace with the repository that contains job1.yml
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: job1.yml
+          event_type: consume-outputs
+
+      - name: Display job1 outputs
+        run: |
+          echo "Output from job1 - output1: ${{ steps.consume.outputs.output1 }}, output2: ${{ steps.consume.outputs.output2 }}"
