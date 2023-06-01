@@ -36,7 +36,7 @@ jobs:
      COLOR: ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}   
      
   third-job:
-    needs: first-job
+    needs: second-job
     runs-on: ubuntu-latest
     steps:  
     - run: |
