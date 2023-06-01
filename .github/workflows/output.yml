@@ -5,7 +5,7 @@ on:
 
 jobs:
   job1:
-    uses: yamini9091/githubactions/.github/workflows/reusable.yaml@v1
+    uses: yamini9091/githubactions/.github/workflows/reusable.yaml@main
 
   job2:
     runs-on: ubuntu-latest
