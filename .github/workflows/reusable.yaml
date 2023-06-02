@@ -1,8 +1,8 @@
 name: Reusable workflow
-
 on:
   workflow_call:
     # Map the workflow outputs to job outputs
+    
     outputs:
       firstword:
         description: "The first output string"
@@ -15,6 +15,8 @@ jobs:
   example_job:
     name: Generate output
     runs-on: ubuntu-latest
+    env:
+     mascot: Mona
     # Map the job outputs to step outputs
     outputs:
       output1: ${{ steps.step1.outputs.firstword }}
@@ -24,3 +26,8 @@ jobs:
         run: echo "firstword=hello" >> $GITHUB_OUTPUT
       - id: step2
         run: echo "secondword=world" >> $GITHUB_OUTPUT
+      - id: step3
+        run: echo 'Hi ${{ env.mascot }}' 
+      - run: echo 'Hi ${{ env.mascot }}'  # Hi Octocat
+        env:
+          mascot: Octocat
