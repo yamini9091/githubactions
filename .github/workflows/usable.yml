@@ -17,12 +17,10 @@ jobs:
           echo "The random output is ${{ random_string }}"
 
   set_output_job:
-    needs:
-      - set_output_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-
-    - name: Run Set Output Job
-      uses: ./.github/workflows/set_output_job.yml
+      - name: Run Set Output Job
+        uses: ./.github/workflows/set_output_job.yml
