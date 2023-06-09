@@ -14,6 +14,7 @@ jobs:
           # Generate a random string using openssl
           random_string=$(openssl rand -hex 16)
           echo "::set-output name=random-output::$random_string"
+          echo $random_string > random_output.txt
 
   use_output_job:
     needs: set_output_job
@@ -21,6 +22,6 @@ jobs:
     steps:
       - name: Use Output
         run: |
-          # Access the random output directly from the previous job's outputs
+          # Read the random output from the environment variable
           random_string=${{ needs.set_output_job.outputs.random-output }}
           echo "The random output is $random_string"
