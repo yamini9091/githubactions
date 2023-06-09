@@ -21,7 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use Output
+        env:
+          RANDOM_OUTPUT: ${{ needs.set_output_job.outputs.random-output }}
         run: |
           # Read the random output from the environment variable
-          random_string=${{ needs.set_output_job.outputs.random-output }}
-          echo "The random output is $random_string"
+          echo "The random output is $RANDOM_OUTPUT"
