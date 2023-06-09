@@ -30,6 +30,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: random-output
+          path: ${{ github.workspace }}/random-output
       - name: Use Output
         run: |
           # Read the random output from the downloaded artifact
