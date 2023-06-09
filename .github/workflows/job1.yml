@@ -2,7 +2,8 @@ name: Workflow with Output Reference
 
 on:
   push:
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   set_output_job:
@@ -27,12 +28,8 @@ jobs:
           random_string=${{ needs.set_output_job.outputs.random-output }}
           echo "::set-output name=random-output::$random_string"
 
-  final_job:
-    needs: use_output_job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Use Output
+      - name: Display Output
         run: |
           # Read the random output from the environment variable
-          random_string=${{ needs.use_output.outputs.random-output }}
+          random_string=${{ steps.use_output.outputs.random-output }}
           echo "The random output is $random_string"
