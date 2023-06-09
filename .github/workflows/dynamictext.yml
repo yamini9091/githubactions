@@ -33,5 +33,5 @@ jobs:
       - name: Use Output
         run: |
           # Read the random output from the downloaded artifact
-          random_string=$(cat random-output/random_output.txt)
+          random_string=$(cat ${{ github.workspace }}/random-output/random_output.txt)
           echo "The random output is $random_string"
