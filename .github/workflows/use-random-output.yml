@@ -4,8 +4,7 @@ name: Use Random Output
 
 on:
   push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   use_output_job:
