@@ -19,5 +19,6 @@ jobs:
       - name: Use Output
         run: |
           # Read the random output from the job-level output of the template
-          random_string=${{ needs.set_output_job.outputs.random-output }}
+          random_string=${{ needs.use_output_job.set_output_job.outputs.random-output }}
           echo "The random output is $random_string"
+
