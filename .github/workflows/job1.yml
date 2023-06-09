@@ -1,16 +1,29 @@
-name: Job 1
+name: Workflow with Output Reference
 
 on:
- workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  job1:
+  set_output_job:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.step1.outputs.test }}
-      output2: ${{ steps.step2.outputs.test }}
+      random-output: ${{ steps.set_output.outputs.random-output }}
     steps:
-      - id: step1
-        run: echo "::set-output name=test::hello yamini"
-      - id: step2
-        run: echo "::set-output name=test::hello ansa"
+      - name: Set Random Output
+        id: set_output
+        run: |
+          # Generate a random string using openssl
+          random_string=$(openssl rand -hex 16)
+          echo "::set-output name=random-output::$random_string"
+
+  use_output_job:
+    needs: set_output_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Output
+        run: |
+          # Access the output from the "Set Random Output" job
+          random_string=${{ needs.set_output_job.outputs.random-output }}
+          echo "The random output is $random_string"
