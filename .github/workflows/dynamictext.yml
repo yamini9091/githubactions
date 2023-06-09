@@ -15,13 +15,23 @@ jobs:
           # Generate a random string using openssl
           random_string=$(openssl rand -hex 16)
           echo $random_string > random_output.txt
+          echo "::set-output name=random-output::$random_string"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: random-output
+          path: random_output.txt
 
   use_output_job:
     needs: set_output_job
     runs-on: ubuntu-latest
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: random-output
       - name: Use Output
         run: |
-          # Read the random output from the file
-          random_string=$(cat random_output.txt)
+          # Read the random output from the downloaded artifact
+          random_string=$(cat random-output/random_output.txt)
           echo "The random output is $random_string"
