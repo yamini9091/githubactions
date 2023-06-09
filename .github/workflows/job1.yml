@@ -8,6 +8,8 @@ on:
 jobs:
   set_output_job:
     runs-on: ubuntu-latest
+    outputs:
+      random-output: ${{ steps.set_output.outputs.random-output }}
     steps:
       - name: Set Random Output
         id: set_output
@@ -22,14 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use Output
-        id: use_output
         run: |
-          # Read the random output from the environment variable
+          # Read the random output from the job-level output
           random_string=${{ needs.set_output_job.outputs.random-output }}
-          echo "::set-output name=random-output::$random_string"
-
-      - name: Display Output
-        run: |
-          # Read the random output from the environment variable
-          random_string=${{ steps.use_output.outputs.random-output }}
           echo "The random output is $random_string"
