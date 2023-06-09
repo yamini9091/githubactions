@@ -1,0 +1,21 @@
+# use-random-output.yml
+
+name: Use Random Output
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  use_output_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Random Output Template
+        uses: ./.github/workflows/random-output-template.yml
+
+      - name: Use Output
+        run: |
+          # Read the random output from the job-level output of the template
+          random_string=${{ needs.set_output_job.outputs.random-output }}
+          echo "The random output is $random_string"
