@@ -1,4 +1,4 @@
-# use-random-output.yml
+# .github/workflows/use-random-output.yml
 
 name: Use Random Output
 
@@ -11,8 +11,13 @@ jobs:
   use_output_job:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
       - name: Call Random Output Template
-        uses: ./.github/workflows/random-output-template.yml
+        uses: yamini9091/githubactions@main
+        with:
+          template: random-output-template.yml
 
       - name: Use Output
         run: |
