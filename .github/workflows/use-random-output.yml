@@ -15,9 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Call Random Output Template
-        uses: yamini9091/githubactions@main
-        with:
-          template: random-output-template.yml
+        uses: yamini9091/githubactions/.github/workflows/random-output-template.yml@main
 
       - name: Use Output
         run: |
