@@ -4,12 +4,9 @@ on:
   push:
   workflow_dispatch:
 
-
 jobs:
   set_output_job:
     runs-on: ubuntu-latest
-    outputs:
-      random-output: ${{ steps.set_output.outputs.random-output }}
     steps:
       - name: Set Random Output
         id: set_output
@@ -24,6 +21,6 @@ jobs:
     steps:
       - name: Use Output
         run: |
-          # Access the output from the "Set Random Output" job
+          # Access the random output directly from the previous job's outputs
           random_string=${{ needs.set_output_job.outputs.random-output }}
           echo "The random output is $random_string"
