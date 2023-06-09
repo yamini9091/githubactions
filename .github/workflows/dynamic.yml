@@ -12,8 +12,8 @@ jobs:
       - name: Set Random Output
         id: set_output
         run: |
-          # Generate a random string using uuidgen
-          random_string=$(uuidgen)
+          # Generate a random string using openssl
+          random_string=$(openssl rand -hex 16)
           echo "::set-output name=random-output::$random_string"
 
   use_output_job:
