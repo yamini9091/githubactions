@@ -1,0 +1,25 @@
+name: Workflow with Output Reference
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  set_output_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Random Output
+        id: set_output
+        run: |
+          # Generate a random string using uuidgen
+          random_string=$(uuidgen)
+          echo "::set-output name=random-output::$random_string"
+
+  use_output_job:
+    needs: set_output_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Output
+        run: |
+          # Access the output from the "Set Random Output" job
+          echo "The random output is ${{ needs.set_output_job.outputs.random-output }}"
