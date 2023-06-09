@@ -1,0 +1,28 @@
+name: Workflow with Output Reference
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  set_output_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Random Output
+        id: set_output
+        run: |
+          # Generate a random string using openssl
+          random_string=$(openssl rand -hex 16)
+          echo $random_string > $HOME/random_output.txt
+          echo "::set-env name=RANDOM_STRING::$random_string"
+
+  use_output_job:
+    needs: set_output_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Output
+        run: |
+          # Read the random output from the temporary file
+          random_string=$(cat $HOME/random_output.txt)
+          echo "The random output is $random_string"
