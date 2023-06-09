@@ -14,15 +14,14 @@ jobs:
         run: |
           # Generate a random string using openssl
           random_string=$(openssl rand -hex 16)
-          echo $random_string > $HOME/random_output.txt
-          echo "::set-env name=RANDOM_STRING::$random_string"
+          echo "::set-output name=random-output::$random_string"
 
   use_output_job:
     needs: set_output_job
     runs-on: ubuntu-latest
     steps:
       - name: Use Output
+        id: use_output
         run: |
-          # Read the random output from the temporary file
-          random_string=$(cat $HOME/random_output.txt)
-          echo "The random output is $random_string"
+          # Access the output from the "Set Random Output" job
+          echo "The random output is ${{ needs.set_output_job.outputs.random-output }}"
