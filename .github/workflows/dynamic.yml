@@ -1,4 +1,5 @@
 name: Workflow with Output Reference
+
 on:
   push:
     branches:
