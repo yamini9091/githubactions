@@ -2,8 +2,7 @@ name: Workflow with Output Reference
 
 on:
   push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   set_output_job:
