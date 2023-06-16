@@ -1,4 +1,4 @@
-name: Workflow with Output Reference
+name: dynamic
 
 on:
   push:
