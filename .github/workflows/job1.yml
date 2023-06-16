@@ -21,7 +21,7 @@ jobs:
 
   use_output_job:
     needs: set_output_job
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Use Output
         run: |
