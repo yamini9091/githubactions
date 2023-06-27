@@ -52,11 +52,3 @@ jobs:
         run: |
           echo "set-environment.result=${{ env['set-environment.result'] }}"
 
-      - name: Configure AWS Access
-        if: ${{ env.set-environment.result == 'success' }}
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-region: eu-west-2
-          role-duration-seconds: 3600
-          role-to-assume: arn:aws:iam::${{ env.ENVIRONMENT_VALUE }}:role/manual-test-poc-role-testing-automation-nbit
-          web-identity-token-file: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
